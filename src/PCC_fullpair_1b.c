@@ -892,12 +892,13 @@ int RemoveOutlierTraces (float **xOut[], t_HeaderInfo *SacHeader[], unsigned int
 			fftw_free(x[tr]); x[tr] = NULL;
 			printf("RemoveOutlierTraces: Skipping %s.%s.%s.%s, the std is %f times the average std!\n", 
 				phd[tr].net, phd[tr].sta, phd[tr].loc, phd[tr].chn, std[tr]/fa1);
-		} else if (nskip && tr+1 < Tr) {
-			memcpy (&phd[tr-nskip+1], &phd[tr+1], sizeof(t_HeaderInfo));
-			x[tr-nskip+1] = x[tr+1];
+		} else if (nskip > 0) {
+			memcpy (&phd[tr-nskip], &phd[tr], sizeof(t_HeaderInfo));
+			x[tr-nskip] = x[tr];
 		}
 	}
 	Tr -= nskip;
+	*Tr0 = Tr;
 	
 	return 0;
 }
